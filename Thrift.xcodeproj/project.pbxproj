@@ -92,7 +92,7 @@
 		__PBXFileRef_Tests/ThriftTests/ThriftTests.swift /* ThriftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThriftTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Thrift.xcodeproj/Configs/Project.xcconfig /* Thrift.xcodeproj/Configs/Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Thrift.xcodeproj/Configs/Project.xcconfig; sourceTree = "<group>"; };
 		"_____Product_Thrift" /* Thrift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Thrift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_ThriftTests" /* ThriftTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ThriftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"_____Product_ThriftTests" /* ThriftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ThriftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,7 +390,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Thrift;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -403,7 +403,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -420,7 +420,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -434,7 +434,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -442,6 +442,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = __PBXFileRef_Thrift.xcodeproj/Configs/Project.xcconfig /* Thrift.xcodeproj/Configs/Project.xcconfig */;
 			buildSettings = {
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -449,6 +450,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = __PBXFileRef_Thrift.xcodeproj/Configs/Project.xcconfig /* Thrift.xcodeproj/Configs/Project.xcconfig */;
 			buildSettings = {
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};

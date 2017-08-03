@@ -19,13 +19,15 @@
 
 import Foundation
 
-public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
+public struct TSet<Object> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable where  Object: TSerializable & Hashable {
+
+    public typealias Element = Object
   /// Typealias for Storage type
-  typealias Storage = Set<Element>
+    public typealias Storage = Set<Object>
   
   
   /// Internal Storage used for TSet (Set\<Element\>)
-  internal var storage : Storage
+    internal var storage : Storage
   
   
   /// Mark: Collection
@@ -53,26 +55,37 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
     return storage.index(i, offsetBy: n, limitedBy: limit)
   }
   
-  public subscript (position: Storage.Index) -> Element? {
-    return storage[position]
-  }
+//  public subscript (position: Storage.Index) -> Object? {
+//    return storage[position]
+//  }
+    
+    public subscript(position: Set<Object>.Index) -> Object {
+        
+        return storage[position]
+    }
   
   /// Mark: SetAlgebra
   internal init(storage: Set<Element>) {
     self.storage = storage
   }
-  
-  public func contains(_ member: Element) -> Bool {
-    return storage.contains(member)
-  }
-  
-  public mutating func insert(_ newMember: Element) -> (inserted: Bool, memberAfterInsert: Element) {
-    return storage.insert(newMember)
-  }
-  
-  public mutating func remove(_ member: Element) -> Element? {
-    return storage.remove(member)
-  }
+    
+    public func contains(_ member: Element?) -> Bool {
+        guard let m = member else { return false }
+        
+        return storage.contains(m)
+    }
+    
+    public mutating func insert(_ newMember: Object) -> (inserted: Bool, memberAfterInsert: Object) {
+        return storage.insert(newMember)
+    }
+    
+    public mutating func remove(_ member: Object) -> Object? {
+        return storage.remove(member)
+    }
+    
+    public mutating func update(with newMember: Object) -> Object? {
+        return storage.update(with: newMember)
+    }
   
   public func union(_ other: TSet<Element>) -> TSet {
     return TSet(storage: storage.union(other.storage))
@@ -96,10 +109,6 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
   
   public func symmetricDifference(_ other: TSet<Element>) -> TSet {
     return TSet(storage: storage.symmetricDifference(other.storage))
-  }
-  
-  public mutating func update(with newMember: Element) -> Element? {
-    return storage.update(with: newMember)
   }
   
   /// Mark: IndexableBase
@@ -146,13 +155,14 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
   
   public static func read(from proto: TProtocol) throws -> TSet {
     let (elementType, size) = try proto.readSetBegin()
-    if elementType != Element.thriftType {
+    
+    if elementType != Object.thriftType {
       throw TProtocolError(error: .invalidData,
                            extendedError: .unexpectedType(type: elementType))
     }
     var set = TSet()
     for _ in 0..<size {
-      let element = try Element.read(from: proto)
+      let element = try Object.read(from: proto)
       set.storage.insert(element)
     }
     try proto.readSetEnd()
@@ -160,9 +170,9 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
   }
   
   public func write(to proto: TProtocol) throws {
-    try proto.writeSetBegin(elementType: Element.thriftType, size: Int32(self.count))
+    try proto.writeSetBegin(elementType: Object.thriftType, size: Int32(self.count))
     for element in self.storage {
-      try Element.write(element, to: proto)
+      try Object.write(element, to: proto)
     }
     try proto.writeSetEnd()
   }
@@ -178,6 +188,6 @@ extension TSet: CustomStringConvertible, CustomDebugStringConvertible {
   
 }
 
-public func ==<Element>(lhs: TSet<Element>, rhs: TSet<Element>) -> Bool {
+public func ==<Object>(lhs: TSet<Object>, rhs: TSet<Object>) -> Bool {
   return lhs.storage == rhs.storage
 }
