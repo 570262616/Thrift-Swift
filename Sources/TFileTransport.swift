@@ -25,6 +25,43 @@ import Foundation
   import Glibc
 #endif
 
+enum PluginError: Error {
+    /// Raised for any errors reading the input
+    case readFailure
+}
+
+// Alias clib's write() so Stdout.write(bytes:) can call it.
+private let _write = write
+
+class Stdin {
+    static func readall() throws -> Data {
+        let fd: Int32 = 0
+        let buffSize = 32
+        var buff = [UInt8]()
+        while true {
+            var fragment = [UInt8](repeating: 0, count: buffSize)
+            let count = read(fd, &fragment, buffSize)
+            if count < 0 {
+                throw PluginError.readFailure
+            }
+            if count < buffSize {
+                buff += fragment[0..<count]
+                return Data(bytes: buff)
+            }
+            buff += fragment
+        }
+    }
+}
+
+class Stdout {
+    static func write(bytes: Data) {
+        bytes.withUnsafeBytes { (p: UnsafePointer<UInt8>) -> () in
+            _ = _write(1, p, bytes.count)
+        }
+    }
+}
+
+
 /// TFileTransport
 /// Foundation-less Swift File transport.
 /// Uses C fopen/fread/fwrite,
@@ -64,26 +101,28 @@ public class TFileTransport: TTransport {
   }
   
   public func read(size: Int) throws -> Data {
-    // set up read buffer, position 0
-    var read = Data(capacity: size)
-    var position = 0
-    
-    // read character buffer
-    var nextChar: UInt8 = 0
-    
-    // continue until we've read size bytes
-    while read.count < size {
-      if fread(&nextChar, 1, 1, self.fileHandle) == 1 {
-        read[position] = nextChar
-
-        // Increment output byte pointer
-        position += 1
-        
-      } else {
-        throw TTransportError(error: .endOfFile)
-      }
-    }
-    return read
+//    // set up read buffer, position 0
+//    var read = Data(capacity: size)
+//    var position = 0
+//
+//    // read character buffer
+//    var nextChar: UInt8 = 0
+//
+//    // continue until we've read size bytes
+//    while read.count < size {
+//      if fread(&nextChar, 1, 1, self.fileHandle) == 1 {
+//        read[position] = nextChar
+//
+//        // Increment output byte pointer
+//        position += 1
+//
+//      } else {
+//        throw TTransportError(error: .endOfFile)
+//      }
+//    }
+//    return read
+    let data = try Stdin.readall()
+    return data
   }
   
   public func write(data: Data) throws {
@@ -98,4 +137,6 @@ public class TFileTransport: TTransport {
   public func flush() throws {
     return
   }
+    
+
 }
