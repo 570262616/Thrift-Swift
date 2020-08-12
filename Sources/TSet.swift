@@ -21,7 +21,7 @@ import Foundation
 
 public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
   /// Typealias for Storage type
-  typealias Storage = Set<Element>
+  public typealias Storage = Set<Element>
   
   
   /// Internal Storage used for TSet (Set\<Element\>)
@@ -53,9 +53,15 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
     return storage.index(i, offsetBy: n, limitedBy: limit)
   }
   
+  #if swift(>=3.2)
+  public subscript (position: Storage.Index) -> Element {
+      return storage[position]
+    }
+  #else
   public subscript (position: Storage.Index) -> Element? {
     return storage[position]
   }
+  #endif
   
   /// Mark: SetAlgebra
   internal init(storage: Set<Element>) {
