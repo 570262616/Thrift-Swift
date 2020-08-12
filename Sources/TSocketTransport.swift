@@ -72,7 +72,7 @@ public class TCFSocketTransport: TStreamTransport {
     var readStream:  Unmanaged<CFReadStream>?
     var writeStream:  Unmanaged<CFWriteStream>?
     CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
-                                       hostname as CFString!,
+                                       hostname as CFString?,
                                        UInt32(port),
                                        &readStream,
                                        &writeStream)
@@ -88,11 +88,11 @@ public class TCFSocketTransport: TStreamTransport {
         }
 
       inputStream = readStream as InputStream
-      inputStream.schedule(in: .current, forMode: .defaultRunLoopMode)
+        inputStream.schedule(in: .current, forMode: .default)
       inputStream.open()
       
       outputStream = writeStream as OutputStream
-      outputStream.schedule(in: .current, forMode: .defaultRunLoopMode)
+        outputStream.schedule(in: .current, forMode: .default)
       outputStream.open()
       
     } else {
@@ -184,7 +184,7 @@ public class TSocketTransport : TTransport {
     var buff = Array<UInt8>.init(repeating: 0, count: size)
     let readBytes = Sys.read(socketDescriptor, &buff, size)
     
-    return Data(bytes: buff[0..<readBytes])
+    return Data(buff[0..<readBytes])
   }
   
   public func write(data: Data) {
