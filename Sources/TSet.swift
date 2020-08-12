@@ -19,7 +19,10 @@
 
 import Foundation
 
-public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
+public struct TSet<E : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
+    
+  public typealias Element = E
+    
   /// Typealias for Storage type
   public typealias Storage = Set<Element>
   
@@ -32,7 +35,7 @@ public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, C
   
   public typealias Indices = Storage.Indices
   public typealias Index = Storage.Index
-  public typealias IndexDistance = Storage.IndexDistance
+  public typealias IndexDistance = Int
   public typealias SubSequence = Storage.SubSequence
   
   

@@ -1,3 +1,4 @@
+// swift-tools-version:5.2
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -20,5 +21,21 @@
 import PackageDescription
 
 let package = Package(
-	name: "Thrift"
+	name: "Thrift",
+    platforms: [
+      // We can't use `.watchOS(.v6)` since it isn't available with `swift-tools-version:5.2`.
+      .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS("6.0")
+    ],
+    products: [
+        .library(name: "thrift",
+                 targets: ["Thrift"]
+        )
+    ],
+    targets: [
+        .target(
+            name: "Thrift",
+            dependencies: [],
+            path: "Sources"
+        )
+    ]
 )
