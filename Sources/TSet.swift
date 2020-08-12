@@ -19,9 +19,9 @@
 
 import Foundation
 
-public struct TSet<E : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
+public struct TSet<Element : TSerializable & Hashable> : SetAlgebra, Hashable, Collection, ExpressibleByArrayLiteral, TSerializable {
     
-  public typealias Element = E
+  public typealias Element = Storage.Element
     
   /// Typealias for Storage type
   public typealias Storage = Set<Element>

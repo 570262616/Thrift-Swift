@@ -27,9 +27,7 @@ let package = Package(
       .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS("6.0")
     ],
     products: [
-        .library(name: "thrift",
-                 targets: ["Thrift"]
-        )
+        .library(name: "Thrift", targets: ["Thrift"]),
     ],
     targets: [
         .target(
